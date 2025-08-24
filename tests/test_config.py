@@ -10,6 +10,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
+from confkit.adapters.ini import IniParser
 from confkit.config import Config
 from confkit.data_types import Boolean, Enum, Float, Integer, IntEnum, IntFlag, Optional, StrEnum, String
 from confkit.exceptions import InvalidConverterError, InvalidDefaultError
@@ -17,7 +18,7 @@ from confkit.exceptions import InvalidConverterError, InvalidDefaultError
 config = Path("test.ini")
 config.unlink(missing_ok=True)  # Remove the file if it exists
 config.touch()  # Create a new empty file for testing
-parser = ConfigParser()
+parser = IniParser(ConfigParser())
 Config.set_parser(parser)
 Config.set_file(config)
 Config.write_on_edit = True  # Enable writing to file during tests
