@@ -15,8 +15,9 @@ from .sentinels import UNSET
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from configparser import ConfigParser
     from pathlib import Path
+
+    from confkit.adapters.configuration_parser import ConfigurationParser
 
 
 class Config[VT]:
@@ -29,7 +30,7 @@ class Config[VT]:
     write_on_edit: ClassVar[bool] = True # Write to the config file when updating a value.
     optional: bool = False # if True, allows None as an extra type when validating types. (both instance and class variables.)
 
-    _parser: ConfigParser = UNSET
+    _parser: ConfigurationParser = UNSET
     _file: Path = UNSET
     _has_read_config: bool = False
 
@@ -138,7 +139,7 @@ class Config[VT]:
         return self._data_type.convert(value) # type: ignore[reportReturnType]
 
     @staticmethod
-    def set_parser(parser: ConfigParser) -> None:
+    def set_parser(parser: ConfigurationParser) -> None:
         """Set the parser for ALL descriptors."""
         Config._parser = parser
 
