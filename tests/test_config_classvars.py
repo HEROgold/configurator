@@ -3,6 +3,7 @@
 This also contains the test cases where specific settings are expected.
 """
 
+from re import I
 import tempfile
 from collections.abc import Callable
 from configparser import ConfigParser
@@ -13,6 +14,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
+from confkit.adapters.ini import IniParser
 from confkit.config import Config
 from confkit.data_types import BaseDataType, Optional, String
 from confkit.exceptions import InvalidConverterError, InvalidDefaultError
@@ -62,7 +64,7 @@ def test_config_converter_is_unset() -> None:
         tmp_file.write("[Test]\nstring = test_value\n")
 
     # Set up isolated environment
-    test_parser = ConfigParser()
+    test_parser = IniParser(ConfigParser())
     test_parser.read(tmp_path)
     Config.set_parser(test_parser)
     Config.set_file(tmp_path)
@@ -94,7 +96,7 @@ def test_config_validation_fails() -> None:
         tmp_file.write("[Test]\nstring = test_value\n")
 
     # Set up isolated environment
-    test_parser = ConfigParser()
+    test_parser = IniParser(ConfigParser())
     test_parser.read(tmp_path)
     Config.set_parser(test_parser)
     Config.set_file(tmp_path)
@@ -120,7 +122,7 @@ def test_config_optional_type_validation_success() -> None:
         tmp_file.write("[Test]\nstring = test_value\n")
 
     # Set up isolated environment
-    test_parser = ConfigParser()
+    test_parser = IniParser(ConfigParser())
     test_parser.read(tmp_path)
     Config.set_parser(test_parser)
     Config.set_file(tmp_path)
@@ -150,7 +152,7 @@ def test_config_type_mismatch_error() -> None:
         tmp_file.write("[Test]\nnull_int = 123\n")
 
     # Set up isolated environment
-    test_parser = ConfigParser()
+    test_parser = IniParser(ConfigParser())
     test_parser.read(tmp_path)
     Config.set_parser(test_parser)
     Config.set_file(tmp_path)
@@ -219,7 +221,7 @@ def test_invalid_default_error() -> None:
 @config_restore
 def test_ensure_option_existing_option() -> None:
     """Test _ensure_option when option already exists (line 202->exit branch)."""
-    test_parser = ConfigParser()
+    test_parser = IniParser(ConfigParser())
     test_parser.add_section("TestExistingOption")
     test_parser.set("TestExistingOption", "existing_setting", "existing_value")
 
