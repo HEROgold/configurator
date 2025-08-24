@@ -6,13 +6,15 @@ from io import TextIOWrapper
 from pathlib import Path
 from typing import NotRequired, TypedDict, Unpack
 
+type ConfigStructure = dict[str, dict[str, str | None]]
+
 
 class GetOptions(TypedDict):
     """Options for the get method."""
 
     fallback: NotRequired[str]
     raw: NotRequired[bool]
-    vars: NotRequired[Mapping[str, str]] | None
+    vars: NotRequired[Mapping[str, str] | None]
 
 
 class ConfigurationParser(ABC):
@@ -41,6 +43,10 @@ class ConfigurationParser(ABC):
     @abstractmethod
     def set(self, section: str, option: str, value: str | None = None) -> None:
         """Set a value in the configuration file."""
+
+    @abstractmethod
+    def remove_option(self, section: str, option: str) -> None:
+        """Remove an option from a section of the configuration file."""
 
     @abstractmethod
     def write(self, fp: TextIOWrapper, *, space_around_delimiters: bool = True) -> None:

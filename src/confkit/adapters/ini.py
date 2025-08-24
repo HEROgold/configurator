@@ -33,3 +33,7 @@ class IniParser(ConfigurationParser):
 
     def write(self, fp: TextIOWrapper, *, space_around_delimiters: bool = True) -> None:
         return self._parser.write(fp, space_around_delimiters=space_around_delimiters)
+
+    def remove_option(self, section: str, option: str) -> None:
+        self._parser.remove_option(section, option)
+
